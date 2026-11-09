@@ -48,7 +48,7 @@ def show_exam_result(request, course_id, submission_id):
     context = {}
     course = get_object_or_404(Course, pk=course_id)
     submission = get_object_or_404(Submission, pk=submission_id)
-    selected_ids = submission.choices.values_list('id', flat=True)
+    selected_ids = list(submission.choices.values_list('id', flat=True))
     
     total_score = 0
     grade = 0
@@ -61,4 +61,15 @@ def show_exam_result(request, course_id, submission_id):
     context['grade'] = grade
     context['total_score'] = total_score
     context['submission'] = submission
-    return render(request, 'onlinecourse/exam_result.html', context)
+    context['selected_ids'] = selected_ids
+    return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
+
+def registration_request(request):
+    return render(request, 'onlinecourse/user_registration.html')
+
+def login_request(request):
+    return render(request, 'onlinecourse/user_login.html')
+
+def logout_request(request):
+    logout(request)
+    return redirect('onlinecourse:index')
